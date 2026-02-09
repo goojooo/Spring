@@ -12,6 +12,9 @@ public class SpringConfigFile
 	public Student StdId()
 	{
 		Student std = new Student();
+		std.setName("Nayan");
+		std.setRollNo(102);
+		std.setEmail("xyz@gmail.com");
 		return std;
 	}
 }
