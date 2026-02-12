@@ -4,12 +4,12 @@
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- LocalDate Bean -->
-    <bean id="dateObj" class="java.time.LocalDate" factory-method="now" />
+    <!-- LocalDateTime Bean -->
+    <bean id="dateTimeObj" class="java.time.LocalDateTime" factory-method="now"/>
 
-    <!-- SeasonFinder Bean -->
-    <bean id="seasonFinder" class="bean.SeasonFinder">
-        <property name="date" ref="dateObj"/>
+    <!-- MealTimeFinder Bean -->
+    <bean id="mealFinder" class="com.app.MealTimeFinder">
+        <property name="dateTime" ref="dateTimeObj"/>
     </bean>
 
 </beans>

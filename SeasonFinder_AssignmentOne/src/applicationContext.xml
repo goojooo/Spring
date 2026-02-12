@@ -8,7 +8,7 @@
     <bean id="dateObj" class="java.time.LocalDate" factory-method="now" />
 
     <!-- SeasonFinder Bean -->
-    <bean id="seasonFinder" class="bean.SeasonFinder">
+    <bean id="seasonFinder" class="com.app.SeasonFinder">
         <property name="date" ref="dateObj"/>
     </bean>
 
