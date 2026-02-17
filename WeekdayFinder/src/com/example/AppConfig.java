@@ -14,7 +14,7 @@ public class AppConfig {
         ApplicationContext context =
                 new AnnotationConfigApplicationContext(AppConfig.class);
 
-        WeekDayService service = context.getBean(WeekDayService.class);
+        WeekDayService service = context.getBean("weekDayService",WeekDayService.class);
 
         System.out.println("Current Week Day: " + service.getCurrentWeekDay());
     }
