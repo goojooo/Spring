@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Text Improver</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0e0e0e;
+      --paper:     #f5f0e8;
+      --cream:     #ede7d8;
+      --accent:    #c8511b;
+      --accent2:   #1b6fc8;
+      --muted:     #7a7060;
+      --border:    #d4cbb8;
+      --card:      #fdfaf4;
+      --shadow:    rgba(14,14,14,0.10);
+      --radius:    14px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--paper);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    /* ── Layout ── */
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 0 24px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 48px 0 32px;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+      animation: fadeDown 0.6s ease both;
+    }
+    .logo-mark {
+      width: 48px;
+      height: 48px;
+      background: var(--ink);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .logo-mark svg { width: 26px; height: 26px; fill: var(--paper); }
+    .header-text h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .header-text p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 4px;
+      font-weight: 300;
+    }
+
+    /* ── Main ── */
+    main {
+      padding: 36px 0 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* ── Mode Tabs ── */
+    .modes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.5s 0.1s ease both;
+    }
+    .mode-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      background: var(--card);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .mode-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .mode-btn.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--paper);
+    }
+    .mode-btn .icon { font-size: 1rem; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 2px 12px var(--shadow);
+      animation: fadeUp 0.5s 0.2s ease both;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      background: var(--paper);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--ink);
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.18s;
+      line-height: 1.6;
+    }
+    textarea:focus { border-color: var(--ink); }
+    textarea::placeholder { color: var(--muted); }
+
+    /* ── Submit ── */
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .char-count {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .submit-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .submit-btn:hover { background: #a83e10; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(200,81,27,0.3); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .submit-btn .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .submit-btn.loading .spinner { display: block; }
+    .submit-btn.loading .btn-label { display: none; }
+
+    /* ── Result ── */
+    .result-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 12px var(--shadow);
+      display: none;
+      animation: fadeUp 0.4s ease both;
+    }
+    .result-card.visible { display: block; }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .result-header span {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--paper);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.15s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.2); }
+    .copy-btn.copied { background: #2d8a4e; border-color: #2d8a4e; }
+
+    .result-body {
+      padding: 24px;
+    }
+    .result-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--ink);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .diff-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1.5px solid var(--border);
+    }
+    .diff-col {
+      padding: 20px 24px;
+    }
+    .diff-col:first-child {
+      border-right: 1.5px solid var(--border);
+      background: #fdf7f0;
+    }
+    .diff-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .diff-label.original { color: #a86020; }
+    .diff-label.improved { color: #2d6ea8; }
+    .diff-text {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── Error ── */
+    .error-bar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #fdf0ee;
+      border: 1.5px solid #f0c4bb;
+      border-radius: 10px;
+      color: #a02010;
+      font-size: 0.875rem;
+    }
+    .error-bar.visible { display: flex; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 20px 0;
+      border-top: 1.5px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    footer code {
+      font-family: 'DM Mono', monospace;
+      background: var(--cream);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(14px);  } to { opacity:1; transform:translateY(0); } }
+    @keyframes spin     { to { transform:rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .diff-row { grid-template-columns: 1fr; }
+      .diff-col:first-child { border-right: none; border-bottom: 1.5px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 5h18v2H3V5zm0 6h12v2H3v-2zm0 6h18v2H3v-2zm14-9l4 3-4 3V8z"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>AI Text Improver</h1>
+      <p>Powered by Ollama · llama3 · Spring Boot backend</p>
+    </div>
+  </header>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <!-- Mode selection -->
+    <div class="modes">
+      <button class="mode-btn active" data-mode="1">
+        <span class="icon">✏️</span> Fix Grammar
+      </button>
+      <button class="mode-btn" data-mode="2">
+        <span class="icon">💼</span> Professional Tone
+      </button>
+      <button class="mode-btn" data-mode="3">
+        <span class="icon">✂️</span> Shorten Text
+      </button>
+    </div>
+
+    <!-- Input card -->
+    <div class="card">
+      <label for="inputText">Your Text</label>
+      <textarea
+        id="inputText"
+        placeholder="Paste or type your text here…"
+        maxlength="4000"
+      ></textarea>
+      <div class="actions">
+        <span class="char-count"><span id="charCount">0</span> / 4000</span>
+        <button class="submit-btn" id="submitBtn">
+          <div class="spinner"></div>
+          <span class="btn-label">Improve Text →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-bar" id="errorBar">
+      ⚠️ <span id="errorMsg">Something went wrong.</span>
+    </div>
+
+    <!-- Result -->
+    <div class="result-card" id="resultCard">
+      <div class="result-header">
+        <span>✨ Improved Result</span>
+        <button class="copy-btn" id="copyBtn">📋 Copy</button>
+      </div>
+      <div class="result-body">
+        <div class="result-text" id="resultText"></div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-col">
+          <div class="diff-label original">▸ Original</div>
+          <div class="diff-text" id="originalText"></div>
+        </div>
+        <div class="diff-col">
+          <div class="diff-label improved">▸ Improved</div>
+          <div class="diff-text" id="improvedText2"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    Calls <code>POST http://localhost:8080/api/improve</code> &nbsp;·&nbsp; Make sure Spring Boot is running
+  </footer>
+</div>
+
+<script>
+  // ── State ──
+  let selectedMode = 1;
+
+  // ── Mode buttons ──
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedMode = parseInt(btn.dataset.mode);
+    });
+  });
+
+  // ── Char counter ──
+  const inputText = document.getElementById('inputText');
+  const charCount = document.getElementById('charCount');
+  inputText.addEventListener('input', () => {
+    charCount.textContent = inputText.value.length;
+  });
+
+  // ── Submit ──
+  const submitBtn  = document.getElementById('submitBtn');
+  const resultCard = document.getElementById('resultCard');
+  const resultText = document.getElementById('resultText');
+  const originalEl = document.getElementById('originalText');
+  const improvedEl = document.getElementById('improvedText2');
+  const errorBar   = document.getElementById('errorBar');
+  const errorMsg   = document.getElementById('errorMsg');
+
+  submitBtn.addEventListener('click', async () => {
+    const text = inputText.value.trim();
+    if (!text) { shake(inputText); return; }
+
+    // Reset UI
+    errorBar.classList.remove('visible');
+    resultCard.classList.remove('visible');
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('http://localhost:8080/api/improve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: selectedMode, text })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Server error');
+      }
+
+      resultText.textContent  = data.improved;
+      originalEl.textContent  = data.original;
+      improvedEl.textContent  = data.improved;
+      resultCard.classList.add('visible');
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    } catch (err) {
+      errorMsg.textContent = err.message || 'Could not connect to Spring Boot server.';
+      errorBar.classList.add('visible');
+    } finally {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }
+  });
+
+  // ── Copy button ──
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const text = resultText.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✅ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '📋 Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+
+  // ── Shake helper ──
+  function shake(el) {
+    el.style.animation = 'none';
+    el.style.borderColor = '#c8511b';
+    setTimeout(() => { el.style.borderColor = ''; }, 1000);
+  }
+</script>
+</body>
+</html>
