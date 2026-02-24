@@ -1,8 +1,8 @@
 1. ###### **What is Container ?**
 
-**=>** A container is a special software/program/application that manages the whole lifecycle of given resources/component from creation to destruction. 
+**=>** A container is a special software/program/application that manages the whole lifecycle of given resources/component from creation to destruction.
 
-For ex. Container is like aquarium managing lifecycle of fishes called as component , once we drop fish into aquarium , the aquarium takes care of fish and  provide necessary survival facilities like water, food, air, environment  
+For ex. Container is like aquarium managing lifecycle of fishes called as component , once we drop fish into aquarium , the aquarium takes care of fish and  provide necessary survival facilities like water, food, air, environment
 
 ###### 
 
@@ -28,11 +28,12 @@ But in Spring/Spring boot application the operation like class loading, object c
 
 **=>** So there are three ways to give input and instructions to IOC container :
 
-	a. Using XML driven configuration (inputs and instruction to IOC container will be given using spring bean configuration file (xml file).
+a. Using XML driven configuration (inputs and instruction to IOC container will be given using spring bean configuration file (xml file).
 
-&nbsp;	b. Using XML + annotation driven configuration.
 
-&nbsp;	c. Using 100% code driven configuration / java config approach .
+ 	b. Using XML + annotation driven configuration.
+
+ 	c. Using 100% code driven configuration / java config approach .
 
 ###### 
 
@@ -60,7 +61,7 @@ This system ensures that your application remains stable, consistence and easy t
 
 ###### **8. What is SETTER INJECTION ?**
 
-**=>** If IOC container uses setter injection method of target spring bean class to assign / inject dependent spring bean class object then it is called as setter injection. 
+**=>** If IOC container uses setter injection method of target spring bean class to assign / inject dependent spring bean class object then it is called as setter injection.
 
 ###### 
 
@@ -78,21 +79,21 @@ Constructor injection is a dependency injection technique where the spring conta
 
 **=>** Collection of same items is called as pool.
 
-&nbsp;  Pool gives reusability of same items.
+   Pool gives reusability of same items.
 
-&nbsp;  where, Collection set of different items is called as cache.
+   where, Collection set of different items is called as cache.
 
-&nbsp;  Cache gives reusability to different items .
+   Cache gives reusability to different items .
 
-&nbsp;  - To implement pool we takes the support of list collection.
+   - To implement pool we takes the support of list collection.
 
-&nbsp;  - To implement the cache we takes the support of map collection where every items (value) will be identified with different name (key).
+   - To implement the cache we takes the support of map collection where every items (value) will be identified with different name (key).
 
 ###### 
 
 ###### **11. If we enable both setter injection and constructor injection on the same property with different values, can you tell  which injection value will be taken as the final value ?**
 
-**=>** Since setter method executes followed by parametrized constructor we can say the setter injection value will be taken as final value. 
+**=>** Since setter method executes followed by parametrized constructor we can say the setter injection value will be taken as final value.
 
 ###### 
 
@@ -100,43 +101,43 @@ Constructor injection is a dependency injection technique where the spring conta
 
 **=>** a. IOC container uses setter method of target spring bean class for injection activity.
 
-&nbsp;  a. IOC container uses parametrized constructor of target spring bean class for creating target spring bean class obj and for injection activity
+   a. IOC container uses parametrized constructor of target spring bean class for creating target spring bean class obj and for injection activity
 
 
 
-&nbsp;  b. In xml driven config, we need to use <property>tag for setter injection.
+   b. In xml driven config, we need to use <property>tag for setter injection.
 
-&nbsp;  b. In annotation driven config, we need to use <constructor-ergs>tag for constructor injection.
-
-
-
-&nbsp;  c. In annotation driven config, we need to place @Autowired on top of setter method
-
-&nbsp;  c. In annotation driven config, we need to place @Autowired on top of constructor
+   b. In annotation driven config, we need to use <constructor-ergs>tag for constructor injection.
 
 
 
-&nbsp;  d. To perform setter injection on "n" properties we need "n" setter methods
+   c. In annotation driven config, we need to place @Autowired on top of setter method
 
-&nbsp;  d. To perform constructor injection on "n" properties we need only one constructor having "n" params
-
-
-
-&nbsp;  e. Bit slow in the injection compare to constructor injection
-
-&nbsp;  e. Bit faster in the injection compare to setter injection
+   c. In annotation driven config, we need to place @Autowired on top of constructor
 
 
 
-&nbsp;  f. To perform setter injection on our choice "n" properties in all permutations and combinations then we need to place max of "n" setter methods
+   d. To perform setter injection on "n" properties we need "n" setter methods
 
-&nbsp;  f. For similar situation we need to take "n!" n no of overloaded constructors which is big number to consider.
+   d. To perform constructor injection on "n" properties we need only one constructor having "n" params
 
 
 
-&nbsp;  g. If spring bean properties are optional to participate in the injection then go for setter injection because for "n" properties we just "n" setter methods max
+   e. Bit slow in the injection compare to constructor injection
 
-&nbsp;  g. If spring bean properties are mandatory  to participate in the injection then prefer working with constructor injection because by taking one no of para constructor with "n" params we can do complete injection on all the spring bean properties.
+   e. Bit faster in the injection compare to setter injection
+
+
+
+   f. To perform setter injection on our choice "n" properties in all permutations and combinations then we need to place max of "n" setter methods
+
+   f. For similar situation we need to take "n!" n no of overloaded constructors which is big number to consider.
+
+
+
+   g. If spring bean properties are optional to participate in the injection then go for setter injection because for "n" properties we just "n" setter methods max
+
+   g. If spring bean properties are mandatory  to participate in the injection then prefer working with constructor injection because by taking one no of para constructor with "n" params we can do complete injection on all the spring bean properties.
 
 ###### 
 
@@ -178,7 +179,7 @@ Design pattern are the best practice to use programming language , technologies,
 
 **=>** Factory pattern is a class that having static and non static factory method having logics to create and return one of the several related classes object based on the data that is being passed.
 
-In JDBC programs most methods calls that are giving JDBC objects are factory patterns. 
+In JDBC programs most methods calls that are giving JDBC objects are factory patterns.
 
 ###### 
 
@@ -186,7 +187,7 @@ In JDBC programs most methods calls that are giving JDBC objects are factory pat
 
 **=>** Architecture gives end to end plan to design and develop the application. While writing each section logics in certain architecture based application development, we use different design pattern to solve the reoccurring problems.
 
-==> MVC is an architecture to develop java web application end to end 
+==> MVC is an architecture to develop java web application end to end
 
 ==>layered application means keeping different logics in different layers(classes/files) and making them participating in the communication.
 
@@ -206,19 +207,49 @@ ex:
 
 ###### **20. Principles of strategy design pattern ?**
 
-**=>**
+**=>** ==>this is GOF pattern can be implemented in any OOP lang.
+
+==>this pattern is very popular in spring programming because it gives set of principles towards designing classes of dependency management and we use dependency management a lot in spring programming.
+
+==>strategy design pattern says while designing the classes of dependency management  should follow set of rules /principles which allows to design the classes as loosely coupled interchangeable parts.(we can change one dependent with another dependent without touching the source code of the target class)
+
+==>The target and dependent classes of dependency management can be designed by using the following principles of strategy dp
 
 ###### 
 
 ###### **21. WHAT IS THE DIFFERENCE BETWEEN JAVABEAN AND SPRINGBEAN CLASS ?**
 
-**=>**
+**=>** Java bean is a java class that having setter and getter methods, it acts as supporting/helper class having properties with setter and getters to pass multiple values across the multiple main classes of same project or different project over the network.
+
+==>spring bean is normal java class whose object is created and managed by IOC container. spring bean class is business class having b.methods so, spring beans are used as the main classes of the project.
+
+
+
+==>if project is designed by spring beans as the main classes then data among spring bean classes will be passed in the form of java bean class objects.
+
+
+
+client app ==>java bean==>springbean1(monitoring logic)==>JavaBean==>springbean2(b.logic)==>JavaBean==>springbean3(peristence logic)
 
 ###### 
 
 ###### **22) What is the difference between eager/pre/early instantiation and lazy/late instantiation ?**
 
-**=>**
+**=>** If the spring bean class obj is created the moment IOC container is created irrespective of whether the spring bean will be used or not is called pre instantiation. if no scope is defined the default scope is "singleton",
+
+by default all singleton scope spring bean participates in eager instantiation and their objects will be places in the internal cache of IOC container.
+
+
+
+==>if the IOC container is creating the spring bean class obj only when the need is there like when ctx.getBean() is called or when the injection process is started then it is called as lazy instantiation.
+
+
+
+==>we can disable pre-instantiation using @Lazy(true) annotation by keeping with @Component or @Bean
+
+
+
+==>other than "singleton " scope spring bean enabled with lazy instantiation by default.
 
 ###### 
 
@@ -230,7 +261,7 @@ ex:
 
 ###### **24. What is  @Scope("prototype") ?**
 
-**=>**IOC container creates separate object for spring bean class for every context\_. get-Bean() call and start spring class object will not be placed in the internal cache of IOC container.
+\*\*=>\*\*IOC container creates separate object for spring bean class for every context\_. get-Bean() call and start spring class object will not be placed in the internal cache of IOC container.
 
 If spring bean class object state is changing time to time then it is recommended to take the scope as the prototype scope. So that for data change one new object will be created for the spring bean.
 
@@ -240,7 +271,7 @@ If spring bean class object state is changing time to time then it is recommende
 
 ###### **25. Why there is pre-instantiation only for singleton scope spring beans ?**
 
-**=>**
+**=>** The singleton scope spring bean that are having pre-instantiation during the IOC container startup  will be maintained in the internal cache of IOC container having reusability across the multiple ctx.getbean() calls and across the multiple injections. so the singleton scope spring beans are having the pre-instantiation because the pre-instantiation objects will never be wasted.
 
 ###### 
 
@@ -256,7 +287,9 @@ This file can have any extension but the recommended extension is .properties .
 
 ###### **27> What is the difference between @Value and @Autowired annotation ?**
 
-**=>**
+**=>** To inject one spring bean class obj to another spring bean class obj HAS-A property takes the support of @Autowired(for injecting spring bean) 
+
+==> To inject values collected from properties file/system properties to primitive/String spring bean properties
 
 ###### 
 
